@@ -1,0 +1,146 @@
+.categories-container {
+  margin-left: 200px; /* space for sidebar */
+  margin-top: 50px;   /* space for topbar */
+  display: flex;
+  min-height: 100vh;
+  background: #f3f4f6; /* light gray background */
+}
+
+.categories-main {
+  flex: 1;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.categories-main h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1f2937; /* dark gray */
+}
+
+/* Add Category Form */
+.addcategory-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.addcategory-form label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.addcategory-form input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.addcategory-form input:focus {
+  outline: none;
+  border-color: #2563eb; /* blue focus */
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+
+.btn-submit {
+  background: #2563eb;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-submit:hover {
+  background: #1e40af;
+}
+
+/* Categories List */
+.categories-list {
+  list-style: none;
+  padding: 0;
+}
+
+.category-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.category-item:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.category-item span {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Action Buttons */
+.category-item button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.category-item button:nth-child(2) {
+  background: #facc15; /* yellow for edit */
+  color: #111827;
+}
+
+.category-item button:nth-child(2):hover {
+  background: #eab308;
+}
+
+.category-item button:last-child {
+  background: #ef4444; /* red for delete */
+  color: #fff;
+}
+
+.category-item button:last-child:hover {
+  background: #dc2626;
+}
+
+/* Inline Edit Input */
+.category-item input {
+  flex: 1;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.category-item input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}

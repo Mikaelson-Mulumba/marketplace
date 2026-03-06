@@ -1,0 +1,418 @@
+
+:root {
+  --limagreen: #2e7d32;
+  --limaorange: #f57c00;
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+:root {
+  --limagreen: #2e7d32;
+  --limaorange: #f57c00;
+  --white: #ffffff;
+  --gray-light: #f5f5f5;
+  --gray-dark: #333333;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--gray-light);
+}
+
+/* Split screen layout */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, var(--limagreen), var(--limaorange));
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.login-left h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.login-left p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.login-left button {
+  margin-top: 2rem;
+  background: var(--white);
+  color: var(--limagreen);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-left button:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* Right side form */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-form h2 {
+  text-align: center;
+  color: var(--limagreen);
+  margin-bottom: 1rem;
+}
+
+.login-form input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+  border-color: var(--limagreen);
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.login-form button {
+  margin-top: 1rem;
+  background-color: var(--limaorange);
+  color: var(--white);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-form button:hover {
+  background-color: #e66a00;
+  transform: translateY(-2px);
+}
+
+.login-form .links {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.login-form .links a {
+  color: var(--limagreen);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.login-form .links a:hover {
+  text-decoration: underline;
+}
+/* Forgot Password Section */
+.forgot-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.forgot-form {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.forgot-form h2 {
+  text-align: center;
+  color: var(--limagreen);
+  margin-bottom: 1rem;
+}
+
+.forgot-form p {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--gray-dark);
+  margin-bottom: 1rem;
+}
+
+.forgot-form input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.forgot-form input:focus {
+  border-color: var(--limagreen);
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.forgot-form button {
+  margin-top: 1rem;
+  background-color: var(--limaorange);
+  color: var(--white);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.forgot-form button:hover {
+  background-color: #e66a00;
+  transform: translateY(-2px);
+}
+
+.forgot-form .links {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.forgot-form .links a {
+  color: var(--limagreen);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-form .links a:hover {
+  text-decoration: underline;
+}
+/* Confirmation Screen */
+.confirmation-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.confirmation-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirmation-card h2 {
+  color: var(--limagreen);
+  margin-bottom: 1rem;
+}
+
+.confirmation-card p {
+  font-size: 1rem;
+  color: var(--gray-dark);
+  margin-bottom: 1.5rem;
+}
+
+.confirmation-card button {
+  background-color: var(--limaorange);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.confirmation-card button:hover {
+  background-color: #e66a00;
+  transform: translateY(-2px);
+}
+.admin-sidebar {
+  width: 240px;
+  background-color: var(--limagreen);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+}
+
+.admin-sidebar h2 {
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--limaorange);
+  text-align: center;
+}
+
+.admin-sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar nav li {
+  margin-bottom: 0.75rem;
+}
+
+.admin-sidebar nav a {
+  color: var(--white);
+  text-decoration: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  display: block;             /* ✅ ensures full-width clickable area */
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.3s ease, padding-left 0.2s ease;
+}
+
+.admin-sidebar nav a:hover {
+  background-color: rgba(255,255,255,0.15);
+  padding-left: 1.25rem;      /* ✅ subtle slide effect */
+}
+
+/* Active link highlighting */
+.admin-sidebar nav a.active {
+  background-color: var(--limaorange);
+  font-weight: bold;
+}
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #2e7d32; /* green */
+  color: #fff;
+  padding: 1rem;
+  overflow-y: auto; /* scrollable */
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-logo img {
+  width: 60px;
+  height: auto;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar li {
+  margin-bottom: 0.5rem;
+}
+
+.admin-sidebar a,
+.submenu-toggle {
+  display: block;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.admin-sidebar a:hover,
+.submenu-toggle:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.submenu li a {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.submenu li a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Responsive: collapse sidebar on small screens */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  flex: 1;
+  padding-right: 40px; /* space for the icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+

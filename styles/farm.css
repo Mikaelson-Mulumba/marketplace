@@ -1,0 +1,100 @@
+/* globals.css */
+
+/* Reset & base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #f3f4f6;
+  color: #111827;
+  line-height: 1.6;
+}
+
+/* Layout */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  margin-left: 180px;
+  margin-top: 40px;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.admin-topbar {
+  background: #047c18;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+
+/* Inputs */
+input, button {
+  font-family: inherit;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary {
+  background: #f8d408;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+}
+
+.btn-primary:hover {
+  background: #1e40af;
+}
+
+.btn-secondary {
+  background: #10b981;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+}
+
+.btn-secondary:hover {
+  background: #047857;
+}
+
+.btn-save {
+  background: #f59e0b;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.btn-save:hover {
+  background: #b45309;
+}

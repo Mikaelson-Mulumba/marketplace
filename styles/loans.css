@@ -1,0 +1,80 @@
+/* styles/loans.css */
+
+/* Container layout */
+.loans-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f9fafb; /* soft background */
+}
+
+/* Main content area */
+.loans-main {
+  margin-top: 50px;
+  margin-left: 70px;
+  padding: 24px;
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Heading */
+.loans-main h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+.loans-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table header */
+.loans-table th {
+  background: #0ea5e9; /* vibrant blue */
+  color: #fff;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Table cells */
+.loans-table td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px;
+  color: #374151;
+}
+
+/* Row hover effect */
+.loans-table tr:hover {
+  background-color: #f0f9ff;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Alternate row shading */
+.loans-table tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .loans-main {
+    margin-left: 0;
+    margin-top: 20px;
+    padding: 16px;
+  }
+
+  .loans-table th,
+  .loans-table td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+}

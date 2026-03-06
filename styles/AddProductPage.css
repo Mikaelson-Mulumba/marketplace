@@ -1,0 +1,322 @@
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #f9fafb, #ecfdf5);
+}
+
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  margin-top: 80px; /* height of top bar */
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 160px;
+  margin-right: 160px;
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* start below top bar */
+  padding: 2rem;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+  margin-top: 2rem; /* spacing below top bar */
+}
+
+
+.form-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #047857;
+}
+
+.form-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-input, select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.file-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.file-chip {
+  font-size: 12px;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.editor-container {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f9fafb;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-btn {
+  padding: 6px 10px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.toolbar-btn:hover {
+  background: #d1d5db;
+}
+
+.editor-content {
+  min-height: 150px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.submit-btn {
+  background: #047857;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.submit-btn:hover {
+  background: #065f46;
+}
+.loans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.loans-table th,
+.loans-table td {
+  border: 1px solid #e5e7eb;
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.loans-table th {
+  background: #047857;
+  color: #fff;
+  font-weight: 600;
+}
+
+.loans-table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.loans-table tr:hover {
+  background: #ecfdf5;
+  transition: background 0.2s ease-in-out;
+}
+
+.loan-item {
+  font-size: 13px;
+  color: #374151;
+}
+
+.cash-cell {
+  font-weight: bold;
+  color: #065f46;
+}
+/* Status color coding */
+.status-select.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-select.approved {
+  background: #d1fae5;
+  color: #065f46;
+}
+.status-select.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Payment color coding */
+.payment-select.paid {
+  background: #d1fae5;
+  color: #065f46;
+}
+.payment-select.not-paid {
+  background: #fef3c7;
+  color: #92400e;
+}
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #e5e7eb;
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.users-table th {
+  background: #1f2937;
+  color: #fff;
+  font-weight: 600;
+}
+
+.users-table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.users-table tr:hover {
+  background: #f3f4f6;
+  transition: background 0.2s ease-in-out;
+}
+
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.role-badge.user {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.role-badge.admin {
+  background: #d1fae5;
+  color: #065f46;
+}
+/* KPI Cards Row */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards in one row */
+  gap: 1.5rem;
+  margin: 2rem;
+}
+
+/* Each chart stacked vertically */
+.charts-grid {
+  display: flex;
+  flex-direction: column; /* stack charts in a column */
+  gap: 2rem;
+  margin: 2rem;
+}
+
+.chart-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 50%; /* full width */
+}
+
+/* Each table stacked vertically */
+.tables-grid {
+  display: flex;
+  flex-direction: column; /* stack tables in a column */
+  gap: 2rem;
+  margin: 2rem;
+}
+
+.table-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 50%; /* full width */
+}
+
+/* Table styling */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  text-align: left;
+}
+
+.dashboard-table th {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.dashboard-table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.dashboard-table tr:hover {
+  background: #f3f4f6;
+}
+
+/* Status colors */
+.status.approved {
+  color: #065f46;
+  font-weight: bold;
+}
+.status.pending {
+  color: #92400e;
+  font-weight: bold;
+}
+.status.paid {
+  color: #2563eb;
+  font-weight: bold;
+}
