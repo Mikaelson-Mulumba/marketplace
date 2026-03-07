@@ -18,6 +18,7 @@ type Loan = {
 
 export default function KampalaLoansPage() {
   const [loans, setLoans] = useState<Loan[]>([]);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -25,7 +26,6 @@ export default function KampalaLoansPage() {
       if (!res.ok) return;
       const data: Loan[] = await res.json();
 
-      // ✅ Parse products JSON if needed
       const normalized = data.map((l) => ({
         ...l,
         products:
@@ -34,8 +34,32 @@ export default function KampalaLoansPage() {
 
       setLoans(normalized);
     };
+
+    const fetchSession = async () => {
+      const res = await fetch("/api/session");
+      if (res.ok) {
+        const sessionData = await res.json();
+        setRole(sessionData.role);
+      }
+    };
+
     fetchLoans();
+    fetchSession();
   }, []);
+
+  const handleDeleteLoan = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this loan?")) return;
+    try {
+      const res = await fetch(`/api/kampala/loans/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setLoans((prev) => prev.filter((loan) => loan.id !== id));
+      } else {
+        console.error("❌ Failed to delete loan");
+      }
+    } catch (err) {
+      console.error("❌ Error deleting loan:", err);
+    }
+  };
 
   return (
     <div>
@@ -54,6 +78,7 @@ export default function KampalaLoansPage() {
                 <th>Products</th>
                 <th>Total</th>
                 <th>Status</th>
+                {role === "kampala" && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -74,7 +99,7 @@ export default function KampalaLoansPage() {
                   <td>
                     {l.loan_status.toLowerCase() === "pending" ? (
                       <select
-                        aria-label={`Update loan status for ${l.name}`} // ✅ accessible name
+                        aria-label={`Update loan status for ${l.name}`}
                         value={l.loan_status}
                         onChange={async (e) => {
                           const newStatus = e.target.value;
@@ -97,20 +122,28 @@ export default function KampalaLoansPage() {
                         }}
                       >
                         <option value="pending">Pending</option>
-                        
                         <option value="cleared">Cleared</option>
                       </select>
                     ) : (
                       l.loan_status
                     )}
                   </td>
+                  {role === "kampala" && (
+                    <td>
+                      <button
+                        onClick={() => handleDeleteLoan(l.id)}
+                        className="btn-delete"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
                 </tr>
-
               ))}
             </tbody>
           </table>
         </main>
       </div>
-    </div >
+    </div>
   );
 }

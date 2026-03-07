@@ -14,6 +14,7 @@ type StockSummary = {
 
 export default function KampalaStockSummaryPage() {
   const [summary, setSummary] = useState<StockSummary[]>([]);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -29,8 +30,38 @@ export default function KampalaStockSummaryPage() {
         console.error("❌ Error fetching stock summary:", err);
       }
     };
+
+    const fetchSession = async () => {
+      try {
+        const res = await fetch("/api/session");
+        if (res.ok) {
+          const sessionData = await res.json();
+          setRole(sessionData.role);
+        }
+      } catch (err) {
+        console.error("❌ Error fetching session:", err);
+      }
+    };
+
     fetchSummary();
+    fetchSession();
   }, []);
+
+  const handleDelete = async (product: string) => {
+    if (!confirm(`Are you sure you want to delete ${product}?`)) return;
+    try {
+      const res = await fetch(`/api/kampala/stock-summary/${product}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setSummary((prev) => prev.filter((item) => item.product !== product));
+      } else {
+        console.error("❌ Failed to delete product");
+      }
+    } catch (err) {
+      console.error("❌ Error deleting product:", err);
+    }
+  };
 
   return (
     <div>
@@ -46,6 +77,7 @@ export default function KampalaStockSummaryPage() {
                 <th>Type</th>
                 <th>Category</th>
                 <th>Available Quantity</th>
+                {role === "kampala" && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -55,6 +87,16 @@ export default function KampalaStockSummaryPage() {
                   <td>{item.type}</td>
                   <td>{item.category}</td>
                   <td>{item.available_quantity}</td>
+                  {role === "kampala" && (
+                    <td>
+                      <button
+                        onClick={() => handleDelete(item.product)}
+                        className="btn-delete"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

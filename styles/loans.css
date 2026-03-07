@@ -1,80 +1,99 @@
-/* styles/loans.css */
+/* loans.css */
 
 /* Container layout */
 .loans-container {
+  margin-left: 80px;
   display: flex;
   min-height: 100vh;
-  background: #f9fafb; /* soft background */
+  background-color: #f9fafb;
 }
 
-/* Main content area */
 .loans-main {
-  margin-top: 50px;
-  margin-left: 70px;
-  padding: 24px;
   flex: 1;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 2rem;
+  background: #fff;
 }
 
 /* Heading */
 .loans-main h1 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  color: #333;
 }
 
 /* Table styling */
 .loans-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
   background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* Table header */
-.loans-table th {
-  background: #0ea5e9; /* vibrant blue */
-  color: #fff;
-  text-align: left;
-  padding: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-/* Table cells */
+.loans-table th,
 .loans-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
   border-bottom: 1px solid #e5e7eb;
-  padding: 12px;
-  color: #374151;
 }
 
-/* Row hover effect */
+.loans-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  color: #111827;
+}
+
 .loans-table tr:hover {
-  background-color: #f0f9ff;
-  transition: background 0.2s ease-in-out;
-}
-
-/* Alternate row shading */
-.loans-table tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .loans-main {
-    margin-left: 0;
-    margin-top: 20px;
-    padding: 16px;
-  }
+/* Status select */
+.loans-table select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
 
-  .loans-table th,
-  .loans-table td {
-    padding: 8px;
-    font-size: 0.85rem;
-  }
+/* Buttons */
+.btn-delete {
+  background-color: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete:hover {
+  background-color: #b91c1c;
+}
+
+.btn-delete.disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+}
+
+.btn-edit {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-edit.disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
 }

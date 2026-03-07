@@ -64,7 +64,7 @@ export default function KampalaStockPage() {
         <AdminSidebar />
 
         <main className="stock-main">
-          <h1>📦 Kampala Stock Management</h1>
+          <h1>📦 Stock Management</h1>
           <button
             onClick={() => router.push("/kampala/stock/add")}
             className="btn-add"
