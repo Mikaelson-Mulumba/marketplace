@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";   // ✅ include useEffect
 import { useRouter } from "next/navigation";
 import AdminSidebar from "../../components/AdminSidebar";
 import AdminTopBar from "../../components/AdminTopBar";
-import "@/styles/forms.css";
+import "@/styles/addstock.css";
 
 export default function AddStockPage() {
   const router = useRouter();
@@ -21,7 +21,27 @@ export default function AddStockPage() {
     { name: "", type: "", category: "", price: "", supplier: "", contact: "", quantity: "" },
   ]);
 
-  const handleProductChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+
+  // ✅ Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/kampala/categories");
+        if (!res.ok) {
+          console.error("❌ Failed to fetch categories");
+          return;
+        }
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error("❌ Error fetching categories:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleProductChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const updated = [...products];
     updated[index][e.target.name as keyof typeof updated[0]] = e.target.value;
     setProducts(updated);
@@ -43,7 +63,6 @@ export default function AddStockPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // total could be price * quantity if you want stock value
     const total = products.reduce(
       (sum, p) => sum + Number(p.price || 0) * Number(p.quantity || 0),
       0
@@ -97,15 +116,22 @@ export default function AddStockPage() {
                   required
                 />
 
+                {/* ✅ Category dropdown connected to category table */}
                 <label htmlFor={`category-${index}`}>Category</label>
-                <input
+                <select
                   id={`category-${index}`}
                   name="category"
                   value={p.category}
                   onChange={(e) => handleProductChange(index, e)}
-                  placeholder="Enter category"
                   required
-                />
+                >
+                  <option value="">-- Select Category --</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
 
                 <label htmlFor={`price-${index}`}>Price</label>
                 <input

@@ -17,10 +17,17 @@ export default function KampalaStockSummaryPage() {
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const res = await fetch("/api/kampala/stock-summary");
-      if (!res.ok) return;
-      const data: StockSummary[] = await res.json();
-      setSummary(data);
+      try {
+        const res = await fetch("/api/kampala/stock-summary");
+        if (!res.ok) {
+          console.error("❌ Failed to fetch stock summary");
+          return;
+        }
+        const data: StockSummary[] = await res.json();
+        setSummary(data);
+      } catch (err) {
+        console.error("❌ Error fetching stock summary:", err);
+      }
     };
     fetchSummary();
   }, []);

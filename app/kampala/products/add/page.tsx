@@ -22,6 +22,7 @@ type StockProduct = {
   product: string;
   type: string;
   category: string;
+  available_quantity: number;
   price?: number;
 };
 
@@ -36,21 +37,25 @@ export default function AddKampalaProductPage() {
     price: 0,
   });
 
-  
+
   const [stockProducts, setStockProducts] = useState<StockProduct[]>([]);
 
   // ✅ Fetch categories
- 
+
   // ✅ Fetch stock products (flattened from JSONB)
   useEffect(() => {
     const fetchStockProducts = async () => {
-      const res = await fetch("/api/kampala/stock-products");
-      if (!res.ok) return;
+      const res = await fetch("/api/kampala/stock-summary");
+      if (!res.ok) {
+        console.error("❌ Failed to fetch stock summary");
+        return;
+      }
       const data: StockProduct[] = await res.json();
       setStockProducts(data);
     };
     fetchStockProducts();
   }, []);
+
 
   // ✅ Handle file uploads
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +99,7 @@ export default function AddKampalaProductPage() {
           <form onSubmit={handleAddProduct} className="addproduct-form">
 
             {/* ✅ Product Name from Stock */}
-            <label htmlFor="product">Product (from Stock)</label>
+            <label htmlFor="product">Product (from Stock Summary)</label>
             <select
               id="product"
               value={formData.name || ""}
@@ -114,14 +119,15 @@ export default function AddKampalaProductPage() {
               <option value="">-- Select Product --</option>
               {stockProducts.map((sp, idx) => (
                 <option key={idx} value={sp.product}>
-                  {sp.product}
+                  {sp.product} ({sp.available_quantity} left)
                 </option>
               ))}
             </select>
 
+
             {/* ✅ Category Dropdown */}
             <label htmlFor="category">Category</label>
-              <input
+            <input
               id="category"
               placeholder="Category"
               value={formData.type || ""}

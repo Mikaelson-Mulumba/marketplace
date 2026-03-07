@@ -1,13 +1,27 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 
-// ✅ GET single product
+// GET single product
 export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const result = await pool.query("SELECT * FROM kampala_products WHERE id = $1", [id]);
+
+  const result = await pool.query(
+    `SELECT p.id,
+            p.name,
+            p.type,
+            p.price,
+            p.pictures,
+            p.category,
+            c.id   AS category_id,
+            c.name AS category_name
+     FROM kampala_products p
+     LEFT JOIN kampala_categories c ON p.category = c.name
+     WHERE p.id = $1`,
+    [id]
+  );
 
   if (result.rows.length === 0) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -16,7 +30,7 @@ export async function GET(
   return NextResponse.json(result.rows[0]);
 }
 
-// ✅ UPDATE product
+// UPDATE product
 export async function PUT(
   req: Request,
   context: { params: Promise<{ id: string }> }
@@ -39,7 +53,7 @@ export async function PUT(
   return NextResponse.json(result.rows[0]);
 }
 
-// ✅ DELETE product
+// DELETE product
 export async function DELETE(
   req: Request,
   context: { params: Promise<{ id: string }> }

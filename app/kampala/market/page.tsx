@@ -13,7 +13,7 @@ type Product = {
   pictures: string[];
   type: string;
   price: number;
-  inStock: boolean;
+  quantity: number; // ✅ available stock
 };
 
 type CartItem = Product & { quantity: number };
@@ -27,27 +27,36 @@ export default function MarketPage() {
   const [borrowerAddress, setBorrowerAddress] = useState("");
   const [borrowerContact, setBorrowerContact] = useState("");
 
-
-  // ✅ Fetch products
+  // ✅ Fetch products + stock summary
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch("/api/products/kampala");
         if (!res.ok) return;
-        const data: Product[] = await res.json();
+        const data: Omit<Product, "quantity">[] = await res.json();
 
-        const normalized = data.map((p) => {
+        const stockRes = await fetch("/api/kampala/stock-summary");
+        const stockData: { product: string; type: string; category: string; available_quantity: number }[] =
+          await stockRes.json();
+
+        const normalized: Product[] = data.map((p) => {
           let pics: string[] = [];
           try {
-            pics =
-              typeof p.pictures === "string"
-                ? JSON.parse(p.pictures)
-                : p.pictures || [];
+            pics = typeof p.pictures === "string" ? JSON.parse(p.pictures) : p.pictures || [];
           } catch {
             pics = [];
           }
-          return { ...p, pictures: pics };
+          const stock = stockData.find((s) => s.product === p.name); // ✅ match by product name
+          return {
+            ...p,
+            pictures: pics,
+            quantity: stock?.available_quantity ?? 0,
+            type: stock?.type ?? p.type,
+            category: stock?.category ?? p.category,
+          };
         });
+
+
 
         setProducts(normalized);
       } catch (err) {
@@ -57,38 +66,36 @@ export default function MarketPage() {
     fetchProducts();
   }, []);
 
-  // ✅ Add product to cart
-  const addToCart = (product: Product) => {
+
+  // ✅ Cart helpers
+  const addToCart = (product: Product) =>
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+        if (existing.quantity < product.quantity) {
+          return prev.map((item) =>
+            item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          );
+        }
+        alert("❌ Cannot add more than available stock!");
+        return prev;
       }
-      return [...prev, { ...product, quantity: 1 }];
+      if (product.quantity > 0) return [...prev, { ...product, quantity: 1 }];
+      alert("❌ Product is out of stock!");
+      return prev;
     });
-  };
 
-  // ✅ Remove product from cart
-  const removeFromCart = (product: Product) => {
+  const removeFromCart = (product: Product) =>
     setCart((prev) =>
       prev
         .map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+          item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0)
     );
-  };
 
-  // ✅ Calculate total
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // ✅ Filter products by search
   const filteredProducts = products.filter((p) =>
     [p.name, p.type, p.category].some((field) =>
       field.toLowerCase().includes(search.toLowerCase())
@@ -101,6 +108,7 @@ export default function MarketPage() {
       <div className="admin-container">
         <AdminSidebar />
         <main className="admin-main">
+          {/* ✅ Search */}
           <div className="search-bar">
             <input
               type="text"
@@ -110,38 +118,43 @@ export default function MarketPage() {
             />
           </div>
 
+          {/* ✅ Product Grid */}
           <section className="product-grid">
             {filteredProducts.map((p) => (
               <div key={p.id} className="product-card">
                 <div className="product-image">
                   {p.pictures.length > 0 ? (
-                    <Image
-                      src={p.pictures[0]}
-                      alt={p.name}
-                      width={150}
-                      height={150}
-                    />
+                    <Image src={p.pictures[0]} alt={p.name} width={150} height={150} />
                   ) : (
                     <div className="no-image">No Image</div>
                   )}
                   <div className="quantity-controls">
-                    <button className="minus-button" onClick={() => removeFromCart(p)}>−</button>
-                    <button className="plus-button" onClick={() => addToCart(p)}>+</button>
+                    <button className="minus-button" onClick={() => removeFromCart(p)}>
+                      −
+                    </button>
+                    <button className="plus-button" onClick={() => addToCart(p)}>
+                      +
+                    </button>
                   </div>
                 </div>
                 <h3 className="product-title">{p.name}</h3>
                 <p className="product-text">Category: {p.category}</p>
                 <p className="product-text">Type: {p.type}</p>
                 <p className="product-text">Price: Shs {p.price}</p>
-                <p className={p.inStock ? "in-stock" : "out-stock"}>
-                  {p.inStock ? "✅ In Stock" : "❌ Out of Stock"}
+                <p className={p.quantity > 0 ? "in-stock" : "out-stock"}>
+                  {p.quantity > 0
+                    ? `✅ ${p.quantity} available`
+                    : `❌ Out of Stock}`}
                 </p>
+
+
+
               </div>
             ))}
           </section>
         </main>
 
-        {/* ✅ Fixed Cart Sidebar */}
+        {/* ✅ Cart Sidebar */}
         <aside className="cart-sidebar">
           <h2>🛒 Cart</h2>
           {cart.length === 0 ? (
@@ -160,7 +173,9 @@ export default function MarketPage() {
             ))
           )}
           <hr />
-          <p><strong>Total:</strong> Shs {total}</p>
+          <p>
+            <strong>Total:</strong> Shs {total}
+          </p>
 
           {/* ✅ Payment Method */}
           <div className="payment-method">
@@ -177,7 +192,7 @@ export default function MarketPage() {
             </select>
           </div>
 
-          {/* ✅ Borrower Fields (only if Loan) */}
+          {/* ✅ Loan Fields */}
           {paymentMethod === "loan" && (
             <div className="loan-fields">
               <label htmlFor="borrowerName">Borrower Name</label>
@@ -188,7 +203,6 @@ export default function MarketPage() {
                 onChange={(e) => setBorrowerName(e.target.value)}
                 required
               />
-
               <label htmlFor="borrowerAddress">Address</label>
               <input
                 id="borrowerAddress"
@@ -197,7 +211,6 @@ export default function MarketPage() {
                 onChange={(e) => setBorrowerAddress(e.target.value)}
                 required
               />
-
               <label htmlFor="borrowerContact">Contact</label>
               <input
                 id="borrowerContact"
@@ -209,30 +222,28 @@ export default function MarketPage() {
             </div>
           )}
 
-          {/* ✅ Save Sale Button */}
+          {/* ✅ Save Sale */}
           <button
             className="btn-save"
             onClick={async () => {
               const saleData = {
                 date: new Date().toISOString(),
-                products: cart.map(item => ({
+                products: cart.map((item) => ({
                   name: item.name,
                   unitPrice: item.price,
-                  quantity: item.quantity
+                  quantity: item.quantity,
                 })),
                 totalAmount: total,
-                paymentMethod
+                paymentMethod,
               };
 
-              // Save sale
               const res = await fetch("/api/kampala/sales", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(saleData)
+                body: JSON.stringify(saleData),
               });
 
               if (res.ok) {
-                // If loan, also save loan record
                 if (paymentMethod === "loan") {
                   const loanData = {
                     name: borrowerName,
@@ -241,25 +252,26 @@ export default function MarketPage() {
                     products: saleData.products,
                     totalAmount: total,
                     loanStatus: "pending",
-                    date: new Date().toISOString()
+                    date: new Date().toISOString(),
                   };
 
                   await fetch("/api/kampala/loans", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(loanData)
+                    body: JSON.stringify(loanData),
                   });
                 }
 
                 alert("✅ Sale saved successfully!");
-                setCart([]); // clear cart
+                setCart([]);
+              } else {
+                alert("❌ Failed to save sale!");
               }
             }}
           >
             Save Sale
           </button>
         </aside>
-
       </div>
     </div>
   );

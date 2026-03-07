@@ -16,25 +16,11 @@ type Product = {
   price: number;
 };
 
-type StockRow = {
-  id: string;
-  date: string;
-  products: {
-    name: string;
-    type: string;
-    category: string;
-    price: number;
-    supplier: string;
-    contact: string;
-    quantity: number;
-  }[];
-  total_amount: number;
-};
-
-type SaleRow = {
-  id: string;
+type StockSummaryRow = {
   product: string;
-  quantity: number;
+  type: string;
+  category: string;
+  available_quantity: number;
 };
 
 // ✅ Normalize pictures safely
@@ -59,30 +45,26 @@ function normalizePictures(pictures: unknown): string[] {
 export default function KampalaProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [stock, setStock] = useState<StockRow[]>([]);
-  const [sales, setSales] = useState<SaleRow[]>([]);
+  const [stockSummary, setStockSummary] = useState<StockSummaryRow[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prodRes, stockRes, salesRes] = await Promise.all([
+        const [prodRes, summaryRes] = await Promise.all([
           fetch("/api/kampala/products"),
-          fetch("/api/kampala/stock"),
-          fetch("/api/kampala/sales"),
+          fetch("/api/kampala/stock-summary"),
         ]);
 
-        if (!prodRes.ok || !stockRes.ok || !salesRes.ok) {
+        if (!prodRes.ok || !summaryRes.ok) {
           console.error("❌ Failed to fetch one of the datasets");
           return;
         }
 
         const prodData: Product[] = await prodRes.json();
-        const stockData: StockRow[] = await stockRes.json();
-        const salesData: SaleRow[] = await salesRes.json();
+        const summaryData: StockSummaryRow[] = await summaryRes.json();
 
         setProducts(prodData);
-        setStock(stockData);
-        setSales(salesData);
+        setStockSummary(summaryData);
       } catch (err) {
         console.error("❌ Error fetching data:", err);
       }
@@ -96,25 +78,13 @@ export default function KampalaProductsPage() {
     setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
-  // ✅ Compute status for each product
+  // ✅ Get live status from stock summary
   const getProductStatus = (productName: string) => {
-    const stockEntries = stock.flatMap((s) =>
-      s.products.filter((p) => p.name === productName)
-    );
-
-    if (stockEntries.length === 0) return "Unavailable";
-
-    const totalStockQty = stockEntries.reduce(
-      (sum, p) => sum + (p.quantity || 0),
-      0
-    );
-
-    const totalSalesQty = sales
-      .filter((sale) => sale.product === productName)
-      .reduce((sum, s) => sum + s.quantity, 0);
-
-    const availableQty = totalStockQty - totalSalesQty;
-    return availableQty > 0 ? `${availableQty} available` : "Unavailable";
+    const summary = stockSummary.find((s) => s.product === productName);
+    if (!summary) return "Unavailable";
+    return summary.available_quantity > 0
+      ? `${summary.available_quantity} available`
+      : `Unavailable — Last seen: ${summary.type}, ${summary.category}`;
   };
 
   return (

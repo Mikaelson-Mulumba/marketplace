@@ -10,8 +10,8 @@ import Image from "next/image";
 type Product = {
   id: string;
   name: string;
-  category: string;
-  pictures: string[]; // ✅ always an array in frontend
+  categoryId: string;   // ✅ always string for select binding
+  pictures: string[];
   type: string;
   price: number;
 };
@@ -28,7 +28,7 @@ export default function EditKampalaProductPage() {
 
   const [formData, setFormData] = useState<Omit<Product, "id">>({
     name: "",
-    category: "",
+    categoryId: "",   // ✅ initialize with empty string
     pictures: [],
     type: "",
     price: 0,
@@ -44,7 +44,6 @@ export default function EditKampalaProductPage() {
         if (!resProd.ok) return;
         const product = await resProd.json();
 
-        // ✅ Normalize pictures into array
         let parsedPictures: string[] = [];
         try {
           parsedPictures =
@@ -57,7 +56,7 @@ export default function EditKampalaProductPage() {
 
         setFormData({
           name: product.name,
-          category: product.category,
+          categoryId: product.category_id?.toString() || "",  // ✅ ensure string
           pictures: parsedPictures,
           type: product.type,
           price: product.price,
@@ -95,6 +94,15 @@ export default function EditKampalaProductPage() {
     }
   };
 
+  // ✅ Remove image
+  const removeImage = (index: number) => {
+    setFormData((prev) => {
+      const updatedPictures = [...prev.pictures];
+      updatedPictures.splice(index, 1);
+      return { ...prev, pictures: updatedPictures };
+    });
+  };
+
   // ✅ Submit update
   const handleUpdateProduct = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -128,19 +136,20 @@ export default function EditKampalaProductPage() {
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Enter product name"
               required
             />
 
             <label htmlFor="category">Category</label>
             <select
               id="category"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              value={formData.categoryId || ""}   // ✅ always string
+              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
               required
             >
               <option value="">-- Select Category --</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.name}>
+                <option key={c.id} value={c.id.toString()}>
                   {c.name}
                 </option>
               ))}
@@ -158,14 +167,22 @@ export default function EditKampalaProductPage() {
             <div className="image-preview">
               {formData.pictures.length > 0 ? (
                 formData.pictures.map((img, idx) => (
-                  <Image
-                    key={idx}
-                    src={img}
-                    alt={`preview-${idx}`}
-                    width={100}
-                    height={100}
-                    className="preview-img"
-                  />
+                  <div key={idx} className="image-wrapper">
+                    <Image
+                      src={img}
+                      alt={`preview-${idx}`}
+                      width={100}
+                      height={100}
+                      className="preview-img"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image"
+                      onClick={() => removeImage(idx)}
+                    >
+                      ❌
+                    </button>
+                  </div>
                 ))
               ) : (
                 "No images"
@@ -177,6 +194,7 @@ export default function EditKampalaProductPage() {
               id="type"
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+              placeholder="Enter product type"
               required
             />
 
@@ -186,6 +204,7 @@ export default function EditKampalaProductPage() {
               type="number"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+              placeholder="Enter product price"
               required
             />
 
