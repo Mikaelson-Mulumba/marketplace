@@ -1,23 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import AdminSidebar from "../../../components/AdminSidebar";
 import AdminTopBar from "../../../components/AdminTopBar";
 import "@/styles/forms.css";
 
-type Stock = {
-  id: string;
-  date: string;
-  product: string;
+type Product = {
+  name: string;
   type: string;
-  quantity: number;
+  category: string;
   price: number;
   supplier: string;
   contact: string;
+  quantity: number; // ✅ added
 };
 
-type ApiResponse = Stock | { error: string };
+type Stock = {
+  id: string;
+  date: string;
+  products: Product[];
+  total_amount: number;
+};
 
 export default function EditStockPage() {
   const router = useRouter();
@@ -26,12 +30,8 @@ export default function EditStockPage() {
 
   const [form, setForm] = useState<Omit<Stock, "id">>({
     date: "",
-    product: "",
-    type: "",
-    quantity: 0,
-    price: 0,
-    supplier: "",
-    contact: "",
+    products: [],
+    total_amount: 0,
   });
 
   // ✅ Fetch existing stock entry
@@ -43,21 +43,11 @@ export default function EditStockPage() {
           console.error("Failed to fetch stock entry");
           return;
         }
-        const data: ApiResponse = await res.json();
-
-        if ("error" in data) {
-          console.error("Stock entry not found");
-          return;
-        }
-
+        const data: Stock = await res.json();
         setForm({
           date: data.date,
-          product: data.product,
-          type: data.type,
-          quantity: data.quantity,
-          price: data.price,
-          supplier: data.supplier,
-          contact: data.contact,
+          products: data.products,
+          total_amount: data.total_amount,
         });
       } catch (err) {
         console.error("Error fetching stock:", err);
@@ -66,23 +56,80 @@ export default function EditStockPage() {
     fetchStock();
   }, [id]);
 
-  // ✅ Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // ✅ Handle product changes
+  // ✅ Handle product changes
+  // ✅ Handle product changes with strict typing
+  const handleProductChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: name === "quantity" || name === "price" ? Number(value) : value,
-    }));
+    const updated = [...form.products];
+
+    // Explicit union of valid keys
+    type ProductKey = keyof Product;
+    const key = name as ProductKey;
+
+    switch (key) {
+      case "price":
+      case "quantity":
+        updated[index][key] = Number(value);
+        break;
+      case "name":
+      case "type":
+      case "category":
+      case "supplier":
+      case "contact":
+        updated[index][key] = value;
+        break;
+      default:
+        // exhaustive check ensures no stray keys
+        const exhaustiveCheck: never = key;
+        throw new Error(`Unhandled field: ${exhaustiveCheck}`);
+    }
+
+    setForm({ ...form, products: updated });
+  };
+
+
+
+  const addProductRow = () => {
+    setForm({
+      ...form,
+      products: [
+        ...form.products,
+        { name: "", type: "", category: "", price: 0, supplier: "", contact: "", quantity: 0 },
+      ],
+    });
+  };
+
+  const removeProductRow = (index: number) => {
+    const updated = [...form.products];
+    updated.splice(index, 1);
+    setForm({ ...form, products: updated });
   };
 
   // ✅ Submit updated stock
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // total = sum of price * quantity
+    const total = form.products.reduce(
+      (sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 0),
+      0
+    );
+
+    const payload = {
+      date: form.date,
+      products: form.products,
+      total_amount: total,
+    };
+
     try {
       const res = await fetch(`/api/kampala/stock/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         alert("✅ Stock updated successfully!");
@@ -106,63 +153,86 @@ export default function EditStockPage() {
             <label htmlFor="date">Date & Time</label>
             <input id="date" name="date" type="text" value={form.date} readOnly />
 
-            <label htmlFor="product">Product</label>
-            <input
-              id="product"
-              name="product"
-              value={form.product}
-              onChange={handleChange}
-              required
-            />
+            {form.products.map((p, index) => (
+              <div key={index} className="product-row">
+                <label htmlFor={`name-${index}`}>Product Name</label>
+                <input
+                  id={`name-${index}`}
+                  name="name"
+                  value={p.name}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter product name"
+                  required
+                />
 
-            <label htmlFor="type">Type</label>
-            <input
-              id="type"
-              name="type"
-              value={form.type}
-              onChange={handleChange}
-              required
-            />
+                <label htmlFor={`type-${index}`}>Type</label>
+                <input
+                  id={`type-${index}`}
+                  name="type"
+                  value={p.type}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter type"
+                  required
+                />
 
-            <label htmlFor="quantity">Quantity</label>
-            <input
-              id="quantity"
-              name="quantity"
-              type="number"
-              value={form.quantity}
-              onChange={handleChange}
-              required
-            />
+                <label htmlFor={`category-${index}`}>Category</label>
+                <input
+                  id={`category-${index}`}
+                  name="category"
+                  value={p.category}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter category"
+                  required
+                />
 
-            <label htmlFor="price">Price</label>
-            <input
-              id="price"
-              name="price"
-              type="number"
-              value={form.price}
-              onChange={handleChange}
-              required
-            />
+                <label htmlFor={`price-${index}`}>Price</label>
+                <input
+                  id={`price-${index}`}
+                  name="price"
+                  type="number"
+                  value={p.price}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter price"
+                  required
+                />
 
-            <label htmlFor="supplier">Supplier</label>
-            <input
-              id="supplier"
-              name="supplier"
-              value={form.supplier}
-              onChange={handleChange}
-              required
-            />
+                <input
+                  id={`quantity-${index}`}
+                  name="quantity"
+                  type="number"
+                  value={p.quantity ?? 0}   // ✅ fallback to 0
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter quantity"
+                  required
+                />
 
-            <label htmlFor="contact">Contact</label>
-            <input
-              id="contact"
-              name="contact"
-              value={form.contact}
-              onChange={handleChange}
-              required
-            />
 
-            <button type="submit" className="btn-submit">Update</button>
+                <label htmlFor={`supplier-${index}`}>Supplier</label>
+                <input
+                  id={`supplier-${index}`}
+                  name="supplier"
+                  value={p.supplier}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter supplier"
+                  required
+                />
+
+                <label htmlFor={`contact-${index}`}>Contact</label>
+                <input
+                  id={`contact-${index}`}
+                  name="contact"
+                  value={p.contact}
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter contact"
+                  required
+                />
+
+                <button type="button" onClick={() => removeProductRow(index)}>Remove</button>
+              </div>
+            ))}
+
+            <button type="button" onClick={addProductRow}>➕ Add Another Product</button>
+            <button type="submit" className="btn-submit">Update Stock</button>
           </form>
         </main>
       </div>

@@ -1,20 +1,36 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 
-// GET all kampala stock
+type Product = {
+  name: string;
+  type: string;
+  category: string;
+  price: number;
+  supplier: string;
+  contact: string;
+  quantity: number; // ✅ include quantity
+};
+
+// GET all Kampala stock entries
 export async function GET() {
   const result = await pool.query("SELECT * FROM kampala_stock ORDER BY date DESC");
   return NextResponse.json(result.rows);
 }
 
-// POST new kampala stock entry
+// POST new Kampala stock entry
 export async function POST(req: Request) {
   const body = await req.json();
-  const { date, product, type, quantity, price, supplier, contact } = body;
+  const { date, products } = body as { date: string; products: Product[] };
+
+  // ✅ Calculate total amount as sum of price * quantity
+  const total_amount = products.reduce(
+    (sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 0),
+    0
+  );
 
   const result = await pool.query(
-    "INSERT INTO kampala_stock (date, product, type, quantity, price, supplier, contact) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *",
-    [date, product, type, quantity, price, supplier, contact]
+    "INSERT INTO kampala_stock (date, products, total_amount) VALUES ($1, $2, $3) RETURNING *",
+    [date, JSON.stringify(products), total_amount]
   );
 
   return NextResponse.json(result.rows[0]);

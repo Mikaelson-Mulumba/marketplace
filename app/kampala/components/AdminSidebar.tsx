@@ -147,6 +147,16 @@ export default function AdminSidebar() {
                   📋 Stock List
                 </Link>
               </li>
+               <li>
+                <Link
+                  href="/kampala/stock/list"
+                  className={`sidebar-sublink ${pathname === "/kampala/stock/list" ? "active" : ""}`}
+                  data-tooltip="Stock Table"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  📋 Stock Table
+                </Link>
+              </li>
             </ul>
           </li>
 

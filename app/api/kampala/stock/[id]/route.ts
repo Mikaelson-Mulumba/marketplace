@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 
+type Product = {
+  name: string;
+  type: string;
+  category: string;
+  price: number;
+  supplier: string;
+  contact: string;
+  quantity: number; // ✅ include quantity
+};
+
 // GET single stock entry
 export async function GET(
   req: Request,
@@ -23,13 +33,18 @@ export async function PUT(
 ) {
   const { id } = await context.params; // ✅ await params
   const body = await req.json();
-  const { date, product, type, quantity, price, supplier, contact } = body;
+  const { date, products } = body as { date: string; products: Product[] };
+
+  const total_amount = products.reduce(
+    (sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 0),
+    0
+  );
 
   const result = await pool.query(
     `UPDATE kampala_stock 
-     SET date=$1, product=$2, type=$3, quantity=$4, price=$5, supplier=$6, contact=$7 
-     WHERE id=$8 RETURNING *`,
-    [date, product, type, quantity, price, supplier, contact, id]
+     SET date=$1, products=$2, total_amount=$3 
+     WHERE id=$4 RETURNING *`,
+    [date, JSON.stringify(products), total_amount, id]
   );
 
   if (result.rows.length === 0) {

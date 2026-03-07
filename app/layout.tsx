@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LimaPro – Smart Agric-Tech Solutions",
-  description: "Empowering farmers with digital tools, market access, and sustainable communities.",
+  title: "Katwala Solutions Limited",
+  description: "Genuine And Trusted Spare Parts",
   icons: {
     icon: "/favicon.png", 
     shortcut: "/favicon.png",

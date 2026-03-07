@@ -16,16 +16,13 @@ type Product = {
   price: number;
 };
 
-type Category = {
-  id: string;
-  name: string;
-};
+
 
 type StockProduct = {
-  id: string;
   product: string;
-  type: string;   // ✅ must be returned by API
-  price?: number; // optional if you want auto-fill price too
+  type: string;
+  category: string;
+  price?: number;
 };
 
 export default function AddKampalaProductPage() {
@@ -39,21 +36,12 @@ export default function AddKampalaProductPage() {
     price: 0,
   });
 
-  const [categories, setCategories] = useState<Category[]>([]);
+  
   const [stockProducts, setStockProducts] = useState<StockProduct[]>([]);
 
   // ✅ Fetch categories
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await fetch("/api/kampala/categories");
-      if (!res.ok) return;
-      const data: Category[] = await res.json();
-      setCategories(data);
-    };
-    fetchCategories();
-  }, []);
-
-  // ✅ Fetch stock products
+ 
+  // ✅ Fetch stock products (flattened from JSONB)
   useEffect(() => {
     const fetchStockProducts = async () => {
       const res = await fetch("/api/kampala/stock-products");
@@ -116,15 +104,16 @@ export default function AddKampalaProductPage() {
                 setFormData({
                   ...formData,
                   name: selectedName,
-                  type: selectedProduct?.type || "",   // ✅ auto-fill type
-                  price: selectedProduct?.price ?? formData.price // optional auto-fill price
+                  type: selectedProduct?.type || "",
+                  category: selectedProduct?.category || "",
+                  price: selectedProduct?.price ? Number(selectedProduct.price) : formData.price
                 });
               }}
               required
             >
               <option value="">-- Select Product --</option>
-              {stockProducts.map((sp) => (
-                <option key={sp.id} value={sp.product}>
+              {stockProducts.map((sp, idx) => (
+                <option key={idx} value={sp.product}>
                   {sp.product}
                 </option>
               ))}
@@ -132,19 +121,14 @@ export default function AddKampalaProductPage() {
 
             {/* ✅ Category Dropdown */}
             <label htmlFor="category">Category</label>
-            <select
+              <input
               id="category"
-              value={formData.category || ""}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              placeholder="Category"
+              value={formData.type || ""}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               required
-            >
-              <option value="">-- Select Category --</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              readOnly   // ✅ auto-filled, not editable
+            />
 
             <label htmlFor="pictures">Upload Images</label>
             <input
@@ -176,7 +160,7 @@ export default function AddKampalaProductPage() {
               value={formData.type || ""}
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               required
-              readOnly   // ✅ make it read-only if you don’t want manual edits
+              readOnly   // ✅ auto-filled, not editable
             />
 
             <label htmlFor="price">Price</label>
