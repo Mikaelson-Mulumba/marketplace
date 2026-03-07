@@ -62,6 +62,7 @@ export default function KampalaStockPage() {
       <AdminTopBar />
       <div className="stock-container">
         <AdminSidebar />
+
         <main className="stock-main">
           <h1>📦 Kampala Stock Management</h1>
           <button

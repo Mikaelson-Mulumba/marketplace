@@ -45,6 +45,7 @@ export default function EditKampalaUserPage() {
   };
 
   if (!formData) return <p>Loading...</p>;
+  
 
   return (
     <div>

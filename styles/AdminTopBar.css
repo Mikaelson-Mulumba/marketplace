@@ -20,6 +20,17 @@
   margin: 0;
 }
 
+/* ✅ Username styling */
+.username {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-right: 1rem;
+  background-color: rgba(255, 255, 255, 0.1); /* subtle background */
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
 .logout-button {
   background-color: #f57c00; /* orange */
   color: #fff;

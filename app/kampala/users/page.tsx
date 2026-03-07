@@ -6,14 +6,13 @@ import AdminSidebar from "../components/AdminSidebar";
 import AdminTopBar from "../components/AdminTopBar";
 import "../../../styles/users.css";
 
-// ✅ Define User type inline so no import needed
 type User = {
   id: string;
   username: string;
   role: string;
-  password: string;       // hashed or plain depending on DB
-  plain_password?: string; // optional if you added it
-  contact?: string;        // optional if you added it
+  password: string;
+  plain_password?: string;
+  contact?: string;
 };
 
 export default function KampalaUsersPage() {
@@ -68,7 +67,6 @@ export default function KampalaUsersPage() {
                 <tr key={u.id}>
                   <td>{u.username}</td>
                   <td>{u.role}</td>
-                  {/* ✅ show plain_password if available, else hashed */}
                   <td>{u.plain_password ?? u.password}</td>
                   <td>{u.contact ?? "—"}</td>
                   <td>
@@ -94,7 +92,3 @@ export default function KampalaUsersPage() {
     </div>
   );
 }
-
-
-
-

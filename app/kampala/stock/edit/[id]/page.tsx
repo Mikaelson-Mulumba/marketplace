@@ -147,6 +147,8 @@ export default function EditStockPage() {
       <AdminTopBar />
       <div className="form-container">
         <AdminSidebar />
+
+
         <main className="form-main">
           <h1>✏️ Edit Stock</h1>
           <form onSubmit={handleSubmit} className="form-grid">
