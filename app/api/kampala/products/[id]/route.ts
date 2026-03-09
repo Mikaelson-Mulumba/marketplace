@@ -7,19 +7,19 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-
   const result = await pool.query(
     `SELECT p.id,
-            p.name,
-            p.type,
-            p.price,
-            p.pictures,
-            p.category,
-            c.id   AS category_id,
-            c.name AS category_name
-     FROM kampala_products p
-     LEFT JOIN kampala_categories c ON p.category = c.name
-     WHERE p.id = $1`,
+          p.name,
+          p.type,
+          p.price,
+          p.pictures,
+          p.category,
+          p.measurement,          -- ✅ include measurement
+          c.id   AS category_id,
+          c.name AS category_name
+   FROM kampala_products p
+   LEFT JOIN kampala_categories c ON p.category = c.name
+   WHERE p.id = $1`,
     [id]
   );
 
@@ -37,14 +37,15 @@ export async function PUT(
 ) {
   const { id } = await context.params;
   const body = await req.json();
-  const { name, category, pictures, type, price } = body;
+  
+const { name, category, pictures, type, price, measurement } = body;
 
-  const result = await pool.query(
-    `UPDATE kampala_products
-     SET name=$1, category=$2, pictures=$3, type=$4, price=$5
-     WHERE id=$6 RETURNING *`,
-    [name, category, JSON.stringify(pictures), type, price, id]
-  );
+const result = await pool.query(
+  `UPDATE kampala_products
+   SET name=$1, category=$2, pictures=$3, type=$4, price=$5, measurement=$6
+   WHERE id=$7 RETURNING *`,
+  [name, category, JSON.stringify(pictures), type, price, measurement, id]
+);
 
   if (result.rows.length === 0) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });

@@ -13,6 +13,7 @@ type Product = {
   supplier: string;
   contact: string;
   quantity: number; // ✅ added
+  measurement?: string;
 };
 
 type Stock = {
@@ -119,6 +120,7 @@ export default function KampalaStockPage() {
                               <th>Category</th>
                               <th>Price</th>
                               <th>Quantity</th>
+                              <th>Measurement</th>
                               <th>Supplier</th>
                               <th>Contact</th>
                             </tr>
@@ -131,13 +133,14 @@ export default function KampalaStockPage() {
                                 <td>{p.category}</td>
                                 <td>{p.price}</td>
                                 <td>{p.quantity}</td>
+                                <td>{p.measurement}</td> {/* ✅ fallback */}
                                 <td>{p.supplier}</td>
                                 <td>{p.contact}</td>
                               </tr>
                             ))}
                           </tbody>
-
                         </table>
+
                       </td>
                     </tr>
                   )}

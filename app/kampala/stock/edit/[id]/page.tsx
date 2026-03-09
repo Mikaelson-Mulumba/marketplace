@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import AdminSidebar from "../../../components/AdminSidebar";
 import AdminTopBar from "../../../components/AdminTopBar";
-import "@/styles/forms.css";
+import "../../../../../styles/edit.css";
 
 type Product = {
   name: string;
@@ -13,8 +13,10 @@ type Product = {
   price: number;
   supplier: string;
   contact: string;
-  quantity: number; // ✅ added
+  quantity: number;
+  measurement?: string; // ✅ new field
 };
+
 
 type Stock = {
   id: string;
@@ -80,17 +82,17 @@ export default function EditStockPage() {
       case "category":
       case "supplier":
       case "contact":
+      case "measurement":   // ✅ allow editing
         updated[index][key] = value;
         break;
       default:
-        // exhaustive check ensures no stray keys
         const exhaustiveCheck: never = key;
         throw new Error(`Unhandled field: ${exhaustiveCheck}`);
     }
 
+
     setForm({ ...form, products: updated });
   };
-
 
 
   const addProductRow = () => {
@@ -98,7 +100,16 @@ export default function EditStockPage() {
       ...form,
       products: [
         ...form.products,
-        { name: "", type: "", category: "", price: 0, supplier: "", contact: "", quantity: 0 },
+        {
+          name: "",
+          type: "",
+          category: "",
+          price: 0,
+          supplier: "",
+          contact: "",
+          quantity: 0,
+          measurement: "N/A",   // ✅ default
+        },
       ],
     });
   };
@@ -176,6 +187,15 @@ export default function EditStockPage() {
                   placeholder="Enter type"
                   required
                 />
+                <label htmlFor={`measurement-${index}`}>Measurement</label>
+                <input
+                  id={`measurement-${index}`}
+                  name="measurement"
+                  value={p.measurement || "N/A"}   // ✅ fallback to N/A
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter measurement (e.g., kg, liters)"
+                />
+
 
                 <label htmlFor={`category-${index}`}>Category</label>
                 <input
@@ -198,6 +218,7 @@ export default function EditStockPage() {
                   required
                 />
 
+                  <label htmlFor={`quantity-${index}`}>Quantity</label>
                 <input
                   id={`quantity-${index}`}
                   name="quantity"

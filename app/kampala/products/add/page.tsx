@@ -14,6 +14,7 @@ type Product = {
   pictures: string[];
   type: string;
   price: number;
+   measurement?: string;
 };
 
 
@@ -22,6 +23,7 @@ type StockProduct = {
   product: string;
   type: string;
   category: string;
+   measurement?: string;
   available_quantity: number;
   price?: number;
 };
@@ -33,6 +35,7 @@ export default function AddKampalaProductPage() {
     name: "",
     category: "",
     pictures: [],
+     measurement:"",
     type: "",
     price: 0,
   });
@@ -111,6 +114,7 @@ export default function AddKampalaProductPage() {
                   name: selectedName,
                   type: selectedProduct?.type || "",
                   category: selectedProduct?.category || "",
+                   measurement: selectedProduct?.measurement || "",
                   price: selectedProduct?.price ? Number(selectedProduct.price) : formData.price
                 });
               }}
@@ -164,6 +168,16 @@ export default function AddKampalaProductPage() {
               id="type"
               placeholder="Type"
               value={formData.type || ""}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+              required
+              readOnly   // ✅ auto-filled, not editable
+            />
+
+            <label htmlFor="type">Measurement</label>
+            <input
+              id="measurement"
+              placeholder="measurement"
+              value={formData.measurement || ""}
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               required
               readOnly   // ✅ auto-filled, not editable

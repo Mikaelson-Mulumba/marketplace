@@ -8,7 +8,8 @@ type Product = {
   price: number;
   supplier: string;
   contact: string;
-  quantity: number; // ✅ include quantity
+  quantity: number; 
+   measurement?: string;
 };
 
 // GET single stock entry

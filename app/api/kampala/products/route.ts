@@ -38,15 +38,15 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, category, pictures, type, price } = body;
+    const { name, category, pictures, type, measurement, price } = body;
 
     // Ensure pictures is always an array
     const picturesArray: string[] = Array.isArray(pictures) ? pictures : [pictures];
 
     const result = await pool.query<ProductRow>(
-      `INSERT INTO kampala_products (name, category, pictures, type, price)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [name, category, JSON.stringify(picturesArray), type, price]
+      `INSERT INTO kampala_products (name, category, pictures, type, measurement, price)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [name, category, JSON.stringify(picturesArray), type, measurement, price] // ✅ include measurement
     );
 
     // Parse pictures back into array for response
@@ -61,3 +61,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to add product" }, { status: 500 });
   }
 }
+

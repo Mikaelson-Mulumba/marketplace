@@ -1,0 +1,115 @@
+/* forms.css */
+
+/* Layout */
+.form-container {
+    margin-top: 50px;
+    margin-left: 180px;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.form-main {
+  flex: 1;
+  padding: 2rem;
+  background: #fff;
+}
+
+/* Heading */
+.form-main h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Form grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 800px;
+}
+
+/* Labels */
+.form-grid label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+/* Inputs */
+.form-grid input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.form-grid input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Product row styling */
+.product-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #f9fafb;
+}
+
+.product-row button {
+  grid-column: span 2;
+  background-color: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.product-row button:hover {
+  background-color: #b91c1c;
+}
+
+/* Add product button */
+.form-grid .btn-add {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-grid .btn-add:hover {
+  background-color: #1d4ed8;
+}
+
+/* Submit button */
+.btn-submit {
+  background-color: #16a34a;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: #15803d;
+}

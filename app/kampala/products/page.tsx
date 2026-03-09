@@ -14,6 +14,7 @@ type Product = {
   pictures: string; // stored as JSON string in DB
   type: string;
   price: number;
+  measurement?: string;
 };
 
 type StockSummaryRow = {
@@ -21,6 +22,7 @@ type StockSummaryRow = {
   type: string;
   category: string;
   available_quantity: number;
+  measurement?: string;
 };
 
 // ✅ Normalize pictures safely
@@ -107,6 +109,7 @@ export default function KampalaProductsPage() {
                 <th>Category</th>
                 <th>Pictures</th>
                 <th>Type</th>
+                <th>Measurement</th>
                 <th>Price</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -134,6 +137,7 @@ export default function KampalaProductsPage() {
                       )}
                     </td>
                     <td>{p.type}</td>
+                     <td>{p.measurement}</td>
                     <td>{p.price}</td>
                     <td>{getProductStatus(p.name)}</td>
                     <td>

@@ -18,8 +18,9 @@ export default function AddStockPage() {
   ).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
 
   const [products, setProducts] = useState([
-    { name: "", type: "", category: "", price: "", supplier: "", contact: "", quantity: "" },
+    { name: "", type: "", category: "", price: "", supplier: "", contact: "", quantity: "", measurement: "N/A" },
   ]);
+
 
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
 
@@ -50,7 +51,7 @@ export default function AddStockPage() {
   const addProductRow = () => {
     setProducts([
       ...products,
-      { name: "", type: "", category: "", price: "", supplier: "", contact: "", quantity: "" },
+      { name: "", type: "", category: "", price: "", supplier: "", contact: "", quantity: "", measurement: "N/A" },
     ]);
   };
 
@@ -115,6 +116,16 @@ export default function AddStockPage() {
                   placeholder="Enter type"
                   required
                 />
+
+                <label htmlFor={`measurement-${index}`}>Measurement</label>
+                <input
+                  id={`measurement-${index}`}
+                  name="measurement"
+                  value={p.measurement}   // ✅ fallback
+                  onChange={(e) => handleProductChange(index, e)}
+                  placeholder="Enter measurement (e.g., kg, liters)"
+                />
+
 
                 {/* ✅ Category dropdown connected to category table */}
                 <label htmlFor={`category-${index}`}>Category</label>

@@ -13,7 +13,8 @@ type Product = {
   pictures: string[];
   type: string;
   price: number;
-  quantity: number; // ✅ available stock
+  quantity: number; // available stock
+  measurement?: string; // ✅ new field
 };
 
 type CartItem = Product & { quantity: number };
@@ -36,8 +37,13 @@ export default function MarketPage() {
         const data: Omit<Product, "quantity">[] = await res.json();
 
         const stockRes = await fetch("/api/kampala/stock-summary");
-        const stockData: { product: string; type: string; category: string; available_quantity: number }[] =
-          await stockRes.json();
+        const stockData: {
+          product: string;
+          type: string;
+          category: string;
+          available_quantity: number;
+          measurement?: string;
+        }[] = await stockRes.json();
 
         const normalized: Product[] = data.map((p) => {
           let pics: string[] = [];
@@ -46,15 +52,17 @@ export default function MarketPage() {
           } catch {
             pics = [];
           }
-          const stock = stockData.find((s) => s.product === p.name); // ✅ match by product name
+          const stock = stockData.find((s) => s.product === p.name);
           return {
             ...p,
             pictures: pics,
             quantity: stock?.available_quantity ?? 0,
             type: stock?.type ?? p.type,
             category: stock?.category ?? p.category,
+            measurement: stock?.measurement ?? "N/A", // ✅ fallback
           };
         });
+
 
 
 
@@ -140,6 +148,8 @@ export default function MarketPage() {
                 <h3 className="product-title">{p.name}</h3>
                 <p className="product-text">Category: {p.category}</p>
                 <p className="product-text">Type: {p.type}</p>
+                <p className="product-text">Measurement: {p.measurement}</p>
+
                 <p className="product-text">Price: Shs {p.price}</p>
                 <p className={p.quantity > 0 ? "in-stock" : "out-stock"}>
                   {p.quantity > 0
@@ -231,11 +241,15 @@ export default function MarketPage() {
                 products: cart.map((item) => ({
                   name: item.name,
                   unitPrice: item.price,
+                  type: item.type,
+                  category: item.category,
                   quantity: item.quantity,
+                  measurement: item.measurement, // ✅ include
                 })),
                 totalAmount: total,
                 paymentMethod,
               };
+
 
               const res = await fetch("/api/kampala/sales", {
                 method: "POST",
@@ -254,6 +268,7 @@ export default function MarketPage() {
                     loanStatus: "pending",
                     date: new Date().toISOString(),
                   };
+
 
                   await fetch("/api/kampala/loans", {
                     method: "POST",

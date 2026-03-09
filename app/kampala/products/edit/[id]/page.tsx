@@ -10,10 +10,11 @@ import Image from "next/image";
 type Product = {
   id: string;
   name: string;
-  categoryId: string;   // ✅ always string for select binding
+  categoryId: string;
   pictures: string[];
   type: string;
   price: number;
+  measurement?: string; // ✅ new field
 };
 
 type Category = {
@@ -28,10 +29,11 @@ export default function EditKampalaProductPage() {
 
   const [formData, setFormData] = useState<Omit<Product, "id">>({
     name: "",
-    categoryId: "",   // ✅ initialize with empty string
+    categoryId: "",
     pictures: [],
     type: "",
     price: 0,
+    measurement: "",   // ✅ initialize
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -56,11 +58,13 @@ export default function EditKampalaProductPage() {
 
         setFormData({
           name: product.name,
-          categoryId: product.category_id?.toString() || "",  // ✅ ensure string
+          categoryId: product.category_id?.toString() || "",
           pictures: parsedPictures,
           type: product.type,
           price: product.price,
+          measurement: product.measurement || "",   // ✅ include
         });
+
 
         const resCat = await fetch("/api/kampala/categories");
         const data: Category[] = await resCat.json();
@@ -154,6 +158,14 @@ export default function EditKampalaProductPage() {
                 </option>
               ))}
             </select>
+            <label htmlFor="measurement">Measurement</label>
+            <input
+              id="measurement"
+              value={formData.measurement || ""}
+              onChange={(e) => setFormData({ ...formData, measurement: e.target.value })}
+              placeholder="Enter measurement (e.g., kg, liters, packets)"
+            />
+
 
             <label htmlFor="pictures">Upload Images</label>
             <input

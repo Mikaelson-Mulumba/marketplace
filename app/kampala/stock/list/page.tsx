@@ -10,6 +10,7 @@ type StockSummary = {
   type: string;
   category: string;
   available_quantity: number;
+  measurement?: string;
 };
 
 export default function KampalaStockSummaryPage() {
@@ -76,6 +77,7 @@ export default function KampalaStockSummaryPage() {
                 <th>Product</th>
                 <th>Type</th>
                 <th>Category</th>
+                <th>Measurement</th> 
                 <th>Available Quantity</th>
                 {role === "kampala" && <th>Actions</th>}
               </tr>
@@ -86,6 +88,7 @@ export default function KampalaStockSummaryPage() {
                   <td>{item.product}</td>
                   <td>{item.type}</td>
                   <td>{item.category}</td>
+                   <td>{item.measurement || "N/A"}</td>
                   <td>{item.available_quantity}</td>
                   {role === "kampala" && (
                     <td>
